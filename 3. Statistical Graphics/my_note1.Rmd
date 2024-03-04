@@ -1,0 +1,60 @@
+---
+title: "My_NoteBook"
+author: "Sanjay Sane"
+date: "2023-12-08"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r}
+library(dplyr)
+data("ChickWeight")
+chk_34 <- filter(ChickWeight, Chick==34)
+chk_34
+```
+
+## Scatter Plot
+
+Weight Against Time
+
+```{r}
+library(ggplot2)
+ggplot(data = chk_34, aes(x=Time, y=weight))+
+  geom_line()
+```
+
+<br>We can see the increasing trend over time.
+
+```{r}
+chk_grp <- filter(ChickWeight, Diet==4)
+ggplot(data = chk_grp, aes(group=Time, y=weight))+
+  geom_boxplot()
+```
+
+Compute the mean weight for chicks in group 4, for each time point. Plot this mean value against time.
+```{r}
+mn_wt <- chk_grp %>% 
+  group_by(Time) %>% 
+  summarise(avg_weight=mean(weight))
+mn_wt
+```
+Plot:
+```{r}
+ggplot(data=mn_wt, aes(x=Time, y=avg_weight))+
+  geom_point()+ggtitle("Scatter Plot")
+```
+
+All groups:
+```{r}
+mn_wt <- ChickWeight %>% 
+  group_by(Diet, Time) %>% 
+  summarise(avg_weight=mean(weight))
+mn_wt
+```
+Plot:
+```{r}
+ggplot(data=mn_wt, aes(x=Time, y=avg_weight, color=Diet))+
+  geom_point()+ggtitle("Scatter Plot")
+```
+
